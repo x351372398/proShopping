@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        main{
+            width: 400px;
+            height: 340px;
+            border: 1px solid red;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            margin: auto;
+
+        }
+        fieldset{
+            flex:0 0 100px;
+            margin: 0;
+        }
+        .content{
+            flex: auto;
+            border: 1px solid blue;
+            margin-top: 20px;
+
+        }
+        .select{
+            display: inline-block;
+        }
+        .select select{
+            margin-right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <fieldset>
+            <legend>请选择五张牌</legend>
+            <div class="select"></div>
+            <button onclick='calcNiu()'>计算</button>
+        </fieldset>
+        <div class="content"></div>
+    </main>
+    <script>
+        // 数据数组
+         // new Array是定义一个空数组 ＝＝＝[]
+        // (10) 表是定义一个长度为10的空数组
+        // fill往数组填充内容
+    //     var numarr = new Array(10);
+    //    numarr= numarr.fill(1);
+    //    numarr=numarr.map(function(item,index){
+    //        return index+1
+    //    })
+
+
+        var numarr = new Array(10).fill(1).map(function(item,index){return index+1})
+        numarr.push('J','Q','K' )
+
+        for(var i =0;i<5;i++){
+            var select = document.createElement('select');
+           
+            numarr.forEach(function(item,index){
+                var option=document.createElement('option');
+                option.innerHTML=item;
+                var count=index+1;
+                if(count>10){
+                    count=10;
+                }
+                option.value=count;
+                select.appendChild(option)
+            })
+            document.querySelector('.select').appendChild(select);
+        }
+
+        // 计算是否有牛    牛几
+        // 1.获取到页面上五张牌的值
+        var selects = document.querySelectorAll('select');
+        var content = document.querySelector('.content');
+        function calcNiu(){
+            // 利用数组来存储获取到的值
+            var carArr = [];
+            for(var i =0;i<selects.length;i++){
+                carArr.push(selects[i].value)
+            }
+            // console.log(carArr);
+            // 注意从输入框或是表单中的其他标签内容拿到的内容基本都是字符串类型的数据
+           
+        //    2. 判断是否是五小牛 
+        //   纪录计算总和
+            var sum=0;
+            // 纪录是否有牛
+            var isNiu = hasNiu(carArr);
+            carArr.forEach(function(item){
+                 sum+=Number(item);
+                 if(sum<=10){
+                     content.innerHTML='五小牛'
+                 }else{
+                    //  3.判断是否有牛
+                    if(isNiu){
+                        if(niuNum(carArr)==0){
+                            content.innerHTML='牛牛'
+                        }else{
+                            content.innerHTML='牛'+niuNum(carArr)
+                        }
+                    }else{
+                        content.innerHTML='没牛'
+                    }
+                 }
+            })
+        }
+
+        // 方法判断是否有牛
+        function hasNiu(arr){
+            // 对数组中的随机三张牌进行总和判断
+            // 1 2 3 4 5
+
+            for(var i=0;i<arr.length;i++){
+                for(var j=i+1;j<arr.length;j++){
+                    for(var k =j+1;k<arr.length;k++){
+                        if((Number(arr[i])+Number(arr[j])+Number(arr[k]))%10==0){
+                            // 有牛
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+
+        }
+
+
+        // 牛几
+        function niuNum(arr){
+            var sumNum=0;
+            arr.forEach(function(item){
+                sumNum+=Number(item);
+            })
+            // 返回余数
+            return sumNum%10;
+        }
+
+  
+    </script>
+</body>
+</html>

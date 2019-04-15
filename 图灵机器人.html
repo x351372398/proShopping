@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+   <form action="">
+       <textarea name="" id="" cols="30" rows="10">
+
+       </textarea>
+   </form>
+   <p></p>
+   <p></p>
+    <script src="jquery-3.3.1.js"></script>
+    <script>
+    $('textarea').keydown(function(e){
+        if(e.keyCode==13){
+            $.ajax({
+                url:'http://www.tuling123.com/openapi/api?key=68be263aac794add9dd804fe4c92dd67&info='+$('textarea').val(),
+                method:'post',
+                dataType:'json',
+                data:{
+                    value:$('textarea').val()
+                },
+                 success:function(data){
+                     console.log(data);
+                     $('p').html($('textarea').val())
+                     $('p').eq(1).html(data.text)
+                    // $('body').append('<p>'+$('textarea').val()+'</p>')
+                    // $('body').append('<p>'+data.text+'</p>')
+                     $('textarea').val('')
+                 }
+            })
+        }
+    })
+    </script>
+</body>
+</html>
